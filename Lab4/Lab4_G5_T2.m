@@ -1,25 +1,22 @@
 clc
 clear all
 close all
-bit_stream = [1 1 0 0 1 1];
+bit_stream = [0 1 0 1 0 1 0 0 0 1 1 0];
 no_bits = length(bit_stream);
-bit_rate = 1000; % 1 kbps
-pulse_per_bit = 2; % for differential manchester
+bit_rate = 1000; 
+pulse_per_bit = 2; 
 pulse_duration = 1/((pulse_per_bit)*(bit_rate));
 no_pulses = no_bits*pulse_per_bit;
 samples_per_pulse = 500;
-fs = (samples_per_pulse)/(pulse_duration); %sampling frequency
-% including pulse duration in sampling frequency
-% ensures having enough samples in each pulse 
-t = 0:1/fs:(no_pulses)*(pulse_duration); % sampling interval
-% total duration = (no_pulse)*(pulse_duration)
-no_samples = length(t); % total number of samples
+fs = (samples_per_pulse)/(pulse_duration); 
+t = 0:1/fs:(no_pulses)*(pulse_duration); 
+no_samples = length(t); 
 dig_sig = zeros(1,no_samples);
-max_voltage = +2;
-min_voltage = -2;
-inv_bit = 1; % inverting bit
+max_voltage = +5;
+min_voltage = -5;
+inv_bit = 1; 
 last_state = max_voltage;
-inv_last_state = min_voltage; % inverse of last state
+inv_last_state = min_voltage; 
 for i = 1:no_bits
  j = (i-1)*2;
  if bit_stream(i) == inv_bit
@@ -32,7 +29,7 @@ dig_sig(((j+1)*(samples_per_pulse)+1):(j+2)*(samples_per_pulse)) = last_state*on
 dig_sig((j*(samples_per_pulse)+1):(j+1)*(samples_per_pulse)) = last_state*ones(1,samples_per_pulse);
  
 dig_sig(((j+1)*(samples_per_pulse)+1):(j+2)*(samples_per_pulse)) = inv_last_state*ones(1,samples_per_pulse);
- temp_cons = last_state; % temporary constant
+ temp_cons = last_state; 
  last_state = inv_last_state;
  inv_last_state = temp_cons;
  end
