@@ -20,18 +20,16 @@ inv_last_state = min_voltage;
 for i = 1:no_bits
  j = (i-1)*2;
  if bit_stream(i) == inv_bit
- 
-dig_sig((j*(samples_per_pulse)+1):(j+1)*(samples_per_pulse)) = inv_last_state*ones(1,samples_per_pulse);
- 
-dig_sig(((j+1)*(samples_per_pulse)+1):(j+2)*(samples_per_pulse)) = last_state*ones(1,samples_per_pulse);
+    dig_sig((j*(samples_per_pulse)+1):(j+1)*(samples_per_pulse)) = inv_last_state*ones(1,samples_per_pulse);
+
+    dig_sig(((j+1)*(samples_per_pulse)+1):(j+2)*(samples_per_pulse)) = last_state*ones(1,samples_per_pulse);
  else
- 
-dig_sig((j*(samples_per_pulse)+1):(j+1)*(samples_per_pulse)) = last_state*ones(1,samples_per_pulse);
- 
-dig_sig(((j+1)*(samples_per_pulse)+1):(j+2)*(samples_per_pulse)) = inv_last_state*ones(1,samples_per_pulse);
- temp_cons = last_state; 
- last_state = inv_last_state;
- inv_last_state = temp_cons;
+    dig_sig((j*(samples_per_pulse)+1):(j+1)*(samples_per_pulse)) = last_state*ones(1,samples_per_pulse);
+
+    dig_sig(((j+1)*(samples_per_pulse)+1):(j+2)*(samples_per_pulse)) = inv_last_state*ones(1,samples_per_pulse);
+     temp_cons = last_state; 
+     last_state = inv_last_state;
+     inv_last_state = temp_cons;
  end
 end
 figure
@@ -39,6 +37,5 @@ plot(t,dig_sig,'linewidth',1.5)
 grid on
 xlabel('time in seconds')
 ylabel('Voltage')
-ylim([(min_voltage - (max_voltage)*0.2) 
-(max_voltage+max_voltage*0.2)])
-title(['Differential Manchester for ',num2str(bit_stream),', last state = ',num2str(last_state),', inverting bit is ',num2str(inv_bit),''])
+ylim([(min_voltage - (max_voltage)*0.2) (max_voltage+max_voltage*0.2)])
+title(['Differential Manchester for ',num2str(bit_stream),', last state = ',num2str(last_state),''])
