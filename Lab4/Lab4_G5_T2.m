@@ -14,22 +14,16 @@ no_samples = length(t);
 dig_sig = zeros(1,no_samples);
 max_voltage = +5;
 min_voltage = -5;
-inv_bit = 1; 
-last_state = max_voltage;
-inv_last_state = min_voltage; 
 for i = 1:no_bits
  j = (i-1)*2;
- if bit_stream(i) == inv_bit
-    dig_sig((j*(samples_per_pulse)+1):(j+1)*(samples_per_pulse)) = inv_last_state*ones(1,samples_per_pulse);
+ if bit_stream(i) == 1
+    dig_sig((j*(samples_per_pulse)+1):(j+1)*(samples_per_pulse)) = min_voltage*ones(1,samples_per_pulse);
 
-    dig_sig(((j+1)*(samples_per_pulse)+1):(j+2)*(samples_per_pulse)) = last_state*ones(1,samples_per_pulse);
+    dig_sig(((j+1)*(samples_per_pulse)+1):(j+2)*(samples_per_pulse)) = max_voltage*ones(1,samples_per_pulse);
  else
-    dig_sig((j*(samples_per_pulse)+1):(j+1)*(samples_per_pulse)) = last_state*ones(1,samples_per_pulse);
+    dig_sig((j*(samples_per_pulse)+1):(j+1)*(samples_per_pulse)) = max_voltage*ones(1,samples_per_pulse);
 
-    dig_sig(((j+1)*(samples_per_pulse)+1):(j+2)*(samples_per_pulse)) = inv_last_state*ones(1,samples_per_pulse);
-     temp_cons = last_state; 
-     last_state = inv_last_state;
-     inv_last_state = temp_cons;
+    dig_sig(((j+1)*(samples_per_pulse)+1):(j+2)*(samples_per_pulse)) = min_voltage*ones(1,samples_per_pulse);
  end
 end
 figure
@@ -38,4 +32,4 @@ grid on
 xlabel('time in seconds')
 ylabel('Voltage')
 ylim([(min_voltage - (max_voltage)*0.2) (max_voltage+max_voltage*0.2)])
-title(['Differential Manchester for ',num2str(bit_stream),', last state = ',num2str(last_state),''])
+title(['Manchester for ',num2str(bit_stream),', last state = ',num2str(max_voltage),''])
